@@ -47,5 +47,3 @@ If you experience any problems with the plugin:
 
 ## License
 This plugin is distributed under the terms of the GPL v2 or later.
-
-Translated with DeepL.com (free version)
