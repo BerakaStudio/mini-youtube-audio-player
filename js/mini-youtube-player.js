@@ -26,6 +26,7 @@
         
         // Configure the player for this instance
         const $progressBar = $container.find('.progress');
+        const $progressHandle = $container.find('.progress-handle');
         const $playBtn = $container.find('.play-btn');
         const $playIcon = $container.find('.player-icon');
         const $timeDisplay = $container.find('.time-display');
@@ -55,11 +56,13 @@
             player: null,
             isPlaying: false,
             progressBar: $progressBar,
+            progressHandle: $progressHandle,
             playBtn: $playBtn,
             playIcon: $playIcon,
             timeDisplay: $timeDisplay,
             progressContainer: $progressContainer,
-            animationFrame: null
+            animationFrame: null,
+            isDragging: false
         };
         
         // Operating the play/pause button
@@ -81,24 +84,84 @@
             }
         });
         
-        // Manage clicks on the progress bar
-        $progressContainer.on('click', function(e) {
+        // Mouse events for drag functionality
+        $progressContainer.on('mousedown', function(e) {
+            e.preventDefault();
             const playerData = miniYTPlayers[playerId];
             if (!playerData.player) return;
             
-            const container = $(this);
+            playerData.isDragging = true;
+            updateProgressOnDrag(e, playerData);
+            
+            // Add document-level event listeners for dragging
+            $(document).on('mousemove.myap', function(e) {
+                if (playerData.isDragging) {
+                    updateProgressOnDrag(e, playerData);
+                }
+            });
+            
+            $(document).on('mouseup.myap', function() {
+                if (playerData.isDragging) {
+                    playerData.isDragging = false;
+                    $(document).off('mousemove.myap mouseup.myap');
+                    
+                    // If it is not playing, start playback
+                    if (!playerData.isPlaying) {
+                        playerData.player.playVideo();
+                    }
+                }
+            });
+        });
+        
+        // Touch events for mobile support
+        $progressContainer.on('touchstart', function(e) {
+            const playerData = miniYTPlayers[playerId];
+            if (!playerData.player) return;
+            
+            playerData.isDragging = true;
+            updateProgressOnDrag(e.originalEvent.touches[0], playerData);
+            
+            // Add document-level event listeners for dragging
+            $(document).on('touchmove.myap', function(e) {
+                if (playerData.isDragging) {
+                    e.preventDefault();
+                    updateProgressOnDrag(e.originalEvent.touches[0], playerData);
+                }
+            });
+            
+            $(document).on('touchend.myap', function() {
+                if (playerData.isDragging) {
+                    playerData.isDragging = false;
+                    $(document).off('touchmove.myap touchend.myap');
+                    
+                    // If it is not playing, start playback
+                    if (!playerData.isPlaying) {
+                        playerData.player.playVideo();
+                    }
+                }
+            });
+        });
+        
+        function updateProgressOnDrag(e, playerData) {
+            const container = playerData.progressContainer;
             const clickPosition = e.pageX - container.offset().left;
             const containerWidth = container.width();
-            const percentage = clickPosition / containerWidth;
+            const percentage = Math.max(0, Math.min(1, clickPosition / containerWidth));
             
             const duration = playerData.player.getDuration();
-            playerData.player.seekTo(duration * percentage, true);
+            const currentTime = duration * percentage;
             
-            // If it is not playing, start playback
-            if (!playerData.isPlaying) {
-                playerData.player.playVideo();
+            // Update visual progress immediately
+            playerData.progressBar.css('width', (percentage * 100) + '%');
+            playerData.progressHandle.css('left', (percentage * 100) + '%');
+            playerData.timeDisplay.text(formatTime(currentTime));
+            
+            // Don't seek on every mouse move, only on mouseup or at intervals
+            if (!playerData.lastSeekTime || Date.now() - playerData.lastSeekTime > 250) {
+                playerData.player.seekTo(currentTime, true);
+                playerData.lastSeekTime = Date.now();
             }
-        });
+        }
     }
     
     // Player status change handler
@@ -132,25 +195,27 @@
         }
     }
     
+    // Format time display (mm:ss)
+    function formatTime(seconds) {
+        seconds = Math.floor(seconds);
+        const minutes = Math.floor(seconds / 60);
+        seconds = seconds % 60;
+        return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    }
+    
     // Update the progress bar
     function updateProgress(playerId) {
         const playerData = miniYTPlayers[playerId];
         const player = playerData.player;
         
-        function formatTime(seconds) {
-            seconds = Math.floor(seconds);
-            const minutes = Math.floor(seconds / 60);
-            seconds = seconds % 60;
-            return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-        }
-        
         function frame() {
-            if (playerData.isPlaying) {
+            if (playerData.isPlaying && !playerData.isDragging) {
                 const current = player.getCurrentTime();
                 const duration = player.getDuration();
                 const percent = (current / duration) * 100;
                 
                 playerData.progressBar.css('width', percent + '%');
+                playerData.progressHandle.css('left', percent + '%');
                 playerData.timeDisplay.text(formatTime(current));
                 
                 playerData.animationFrame = requestAnimationFrame(frame);

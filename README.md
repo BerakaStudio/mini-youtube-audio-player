@@ -1,14 +1,16 @@
-## Mini YouTube Audio Player
+## MYAP - Mini YouTube Audio Player
 A WordPress plugin that creates a minimalistic audio player using YouTube videos.
 
 ## Features
-- Minimalist audio player with elegant design
+- Minimalist audio player with simple design
 - Uses YouTube API to play audio from videos
-- Customizable: configurable color and width
+- Customizable: color, width and layout configurable
 - Multiple players can coexist on the same page
 - One-click play/pause control
-- Interactive progress bar for track navigation
+- Interactive progress bar with drag-and-drop functionality
 - Playback time display
+- Two layout options: standard and reverse
+- Background options: custom color or transparent
 
 ## Installation
 - Download the plugin ZIP file
@@ -20,17 +22,29 @@ A WordPress plugin that creates a minimalistic audio player using YouTube videos
 ## Usage
 Use the shortcode `[mini_youtube_player]` to insert the player into any page or post.
 
-### Shortcode parameters
+## Shortcode parameters
 - **video_id**: ID of the YouTube video (required)
 - **color**: Custom color for play button and progress bar (optional, by default: #129859)
 - **width**: Maximum width in pixels (optional, default: auto)
+- **layout**: Player design ('default' o 'reversed') (optional, by default: 'default')
+- **bg_color**: Player background color (optional, by default: #959595)
+- **transparent**: Transparent background ('true' o 'false') (optional, by default: 'false')
 
 ## Examples
 - Basic player:
 `[mini_youtube_player video_id="TiZ3gvoO5_I"]`
 
 - Custom player:
-`[mini_youtube_player video_id="TiZ3gvoO5_I" color="#287083" width="400"]`
+`[mini_youtube_player video_id="TiZ3gvoO5_I" color="#ff0000" width="400" layout="reversed" transparent="true"]`
+
+- Custom background player:
+`[mini_youtube_player video_id="TiZ3gvoO5_I" bg_color="#333333"]`
+
+## Available designs
+1. **Default design**
+   - Progress bar → Time counter → Play button
+2. **Reversed design**
+   - Play button → Progress bar → Time counter
 
 ## Troubleshooting
 If you experience any problems with the plugin:
