@@ -32,13 +32,13 @@ Use the shortcode `[mini_youtube_player]` to insert the player into any page or 
 
 ## Examples
 - Basic player:
-`[mini_youtube_player video_id="TiZ3gvoO5_I"]`
+`[myap video_id="TiZ3gvoO5_I"]`
 
 - Custom player:
-`[mini_youtube_player video_id="TiZ3gvoO5_I" color="#ff0000" width="400" layout="reversed" transparent="true"]`
+`[myap video_id="TiZ3gvoO5_I" layout="reversed" bg_color="#FF0000" transparent="false" color="#262624"]`
 
 - Custom background player:
-`[mini_youtube_player video_id="TiZ3gvoO5_I" bg_color="#333333"]`
+`[myap video_id="TiZ3gvoO5_I" bg_color="#333333"]`
 
 ## Available designs
 1. **Default design**
