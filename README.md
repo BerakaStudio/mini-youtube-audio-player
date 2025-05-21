@@ -45,5 +45,11 @@ If you experience any problems with the plugin:
 - Some videos may have playback restrictions based on region or owner's settings
 - The plugin plays only the audio of the video, it does not display the visual content
 
+## Requirements
+- WordPress 5.0 or greater
+- PHP 7.0 or greater
+- Navegador moderno compatible con la API de YouTube
+- Conexión a Internet para cargar los recursos de YouTube
+
 ## License
 This plugin is distributed under the terms of the GPL v2 or later.
