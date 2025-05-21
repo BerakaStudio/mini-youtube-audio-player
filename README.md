@@ -48,8 +48,8 @@ If you experience any problems with the plugin:
 ## Requirements
 - WordPress 5.0 or greater
 - PHP 7.0 or greater
-- Navegador moderno compatible con la API de YouTube
-- Conexión a Internet para cargar los recursos de YouTube
+- Modern browser compatible with YouTube API
+- Internet connection to load YouTube resources
 
 ## License
 This plugin is distributed under the terms of the GPL v2 or later.
