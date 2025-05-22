@@ -20,7 +20,7 @@ A WordPress plugin that creates a minimalistic audio player using YouTube videos
 - Activate the plugin
 
 ## Usage
-Use the shortcode `[mini_youtube_player]` to insert the player into any page or post.
+Use the shortcode `[myap]` to insert the player into any page or post.
 
 ## Shortcode parameters
 - **video_id**: ID of the YouTube video (required)
